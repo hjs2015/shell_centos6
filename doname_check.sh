@@ -1,4 +1,6 @@
 #!/bin/bash
+# 作用：用于检查https域名的到期时间
+# file文件存储你https的域名，一行一条，格式 https://xx.xx
 
 read -p "输入域名文件：" file
 now_time=`date +%s`
