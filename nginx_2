@@ -2,7 +2,9 @@
 # hjs
 # 2019.12.02
 NGINX=/usr/local/nginx/sbin/nginx
+NGINX_START_SHELL='/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf'
 PID=/usr/local/nginx/logs/nginx.pid
+
 
 start()
 {
@@ -10,7 +12,8 @@ start()
 	then
 		echo "nginx已经启动!"
 	else
-		$NGINX
+		#$NGINX
+		echo "${NGINX_START_SHELL}"|bash
 		echo "nginx启动成功!"
 	fi
 }
@@ -19,7 +22,7 @@ stop()
 {
 	if [ -f $PID ]
 	then
-		killall -s QUIT nginx
+		kill -15 `cat ${PID}`
 		echo "nginx已经关闭!"
 	else
 		echo "nginx未启动!"
@@ -49,7 +52,7 @@ reload()
         then
                 kill -1 `cat $PID`
 		if [ $? -eq 0 ];then
-			echo "nginx reload succ"
+			echo "nginx reload succful"
 		else
 			echo "nginx reload fail"
 		fi
