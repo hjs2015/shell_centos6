@@ -1,0 +1,81 @@
+#!/bin/bash
+# hjs
+# 2019.12.02
+NGINX=/usr/local/nginx/sbin/nginx
+PID=/usr/local/nginx/logs/nginx.pid
+
+start()
+{
+	if [ -f $PID ] 
+	then
+		echo "nginx已经启动!"
+	else
+		$NGINX
+		echo "nginx启动成功!"
+	fi
+}
+
+stop()
+{
+	if [ -f $PID ]
+	then
+		killall -s QUIT nginx
+		echo "nginx已经关闭!"
+	else
+		echo "nginx未启动!"
+	fi
+}
+
+restart()
+{	
+	if [ -f $PID ]
+	then
+		stop
+	fi
+	start
+}
+
+status()
+{
+        if [ $(ps aux |grep -Ei "nginx"|grep -Ei "master"|grep -v grep|wc -l) -ge 1 ]
+        then
+                echo "nginx is active"
+        fi
+}
+
+reload()
+{
+        if [ -f $PID ]
+        then
+                kill -1 `cat $PID`
+		if [ $? -eq 0 ];then
+			echo "nginx reload succ"
+		else
+			echo "nginx reload fail"
+		fi
+        fi
+}
+
+
+
+case $1 in
+
+"start") start
+	;;
+
+"stop") stop
+	;;
+
+"restart") restart
+	;;
+
+"status") status
+        ;;
+
+"reload") reload
+        ;;
+
+
+*) echo "请输入正确的操作参数 start|stop|restart|status|reload"
+	;;
+esac
