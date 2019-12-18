@@ -8,8 +8,7 @@ PID=/usr/local/nginx/logs/nginx.pid
 
 start()
 {
-	if [ -f $PID ] 
-	then
+	if [ -f $PID ];then
 		echo "nginx已经启动!"
 	else
 		#$NGINX
@@ -20,8 +19,7 @@ start()
 
 stop()
 {
-	if [ -f $PID ]
-	then
+	if [ -f $PID ];then
 		kill -15 `cat ${PID}`
 		echo "nginx已经关闭!"
 	else
@@ -31,8 +29,7 @@ stop()
 
 restart()
 {	
-	if [ -f $PID ]
-	then
+	if [ -f $PID ];then
 		stop
 	fi
 	start
@@ -40,9 +37,10 @@ restart()
 
 status()
 {
-        if [ $(ps aux |grep -Ei "nginx"|grep -Ei "master"|grep -v grep|wc -l) -ge 1 ]
-        then
+        if [ $(ps aux |grep -Ei "nginx"|grep -Ei "master"|grep -v grep|wc -l) -ge 1 ];then
                 echo "nginx is active"
+	else
+		exit 1
         fi
 }
 
@@ -63,19 +61,24 @@ reload()
 
 case $1 in
 
-"start") start
+"start") 
+	start
 	;;
 
-"stop") stop
+"stop") 
+	stop
 	;;
 
-"restart") restart
+"restart") 
+	restart
 	;;
 
-"status") status
+"status") 
+	status
         ;;
 
-"reload") reload
+"reload") 
+	reload
         ;;
 
 
