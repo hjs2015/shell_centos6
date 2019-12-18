@@ -1,6 +1,7 @@
 #!/bin/bash
 # hjs
 # 2019.12.02
+# update 2019.12.18 15.17
 NGINX=/usr/local/nginx/sbin/nginx
 NGINX_START_SHELL='/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf'
 PID=/usr/local/nginx/logs/nginx.pid
@@ -8,10 +9,11 @@ PID=/usr/local/nginx/logs/nginx.pid
 
 start()
 {
-	if [ -f $PID ];then
+	if [ -f $PID -a $(ps aux |grep -Ei "nginx"|grep -Ei "master"|grep -v grep|wc -l) -eq 1 ];then
 		echo "nginx已经启动!"
 	else
 		#$NGINX
+		rm -f ${PID}
 		echo "${NGINX_START_SHELL}"|bash
 		echo "nginx启动成功!"
 	fi
