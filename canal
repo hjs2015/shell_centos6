@@ -1,0 +1,88 @@
+#!/bin/bash
+# hjs
+# 2019.12.02
+# update 2019.12.19 23.06
+CANAL_DIR='/usr/local/canal'
+CANAL_START_SHELL='/usr/local/canal//bin/startup.sh'
+CANAL_STOP_SHELL='/usr/local/canal/bin/stop.sh'
+CANAL_RESTART_SHELL='/usr/local/canal/bin/restart.sh'
+PID='/usr/local/canal/bin/adapter.pid'
+
+if [ ! -d ${CANAL_DIR}  ];then
+	echo "ERROR ${CANAL_DIR} not exist!"
+	exit 1
+fi
+
+start()
+{
+	if [ $(ps aux |grep java|grep -E "/data/canal/canal.adapter/"|wc -l) -eq 1 ];then
+		echo "canal已经启动!"
+	else
+		#$CANAL
+		rm -f ${PID}
+		echo "${CANAL_START_SHELL}"|bash
+		echo "canal启动成功!"
+	fi
+}
+
+stop()
+{
+	if [ -f $PID ];then
+		#kill -15 `cat ${PID}`
+		echo "${CANAL_STOP_SHELL}"|bash
+		echo "canal已经关闭!"
+	elif [ ! -f ${PID} -a $(ps aux |grep java|grep -E "/data/canal/canal.adapter/"|wc -l) -eq 1 ];then
+		kill -15 `ps aux |grep java|grep -E "/data/canal/canal.adapter/|awk '{print $2}'`
+		echo "canal已经关闭!"
+	elif [ ! -f ${PID} -a $(ps aux |grep java|grep -E "/data/canal/canal.adapter/"|wc -l) -eq 0 ];then
+		echo "canal未启动!"
+	fi
+}
+
+restart()
+{	
+	if [ -f $PID ];then
+		echo "${CANAL_RESTART_SHELL}"|bash
+		echo "canal重新启动。。"
+	elif [ ! -f ${PID} -a $(ps aux |grep java|grep -E "/data/canal/canal.adapter/"|wc -l) -eq 1 ];then
+		kill -15 `ps aux |grep java|grep -E "/data/canal/canal.adapter/|awk '{print $2}'`
+		echo "${CANAL_START_SHELL}"|bash
+	elif [ ! -f ${PID} -a $(ps aux |grep java|grep -E "/data/canal/canal.adapter/"|wc -l) -eq 0 ];then
+		echo "${CANAL_START_SHELL}"|bash
+	fi
+	
+}
+
+status()
+{
+        if [ $(ps aux |grep java|grep -E "/data/canal/canal.adapter/"|wc -l) -ge 1 ];then
+                echo "canal is active"
+	else
+		echo "canal not active"
+        fi
+}
+
+
+
+case $1 in
+
+"start") 
+	start
+	;;
+
+"stop") 
+	stop
+	;;
+
+"restart") 
+	restart
+	;;
+
+"status") 
+	status
+        ;;
+
+*)
+	echo "请输入正确的操作参数 start|stop|restart|status"
+	;;
+esac
