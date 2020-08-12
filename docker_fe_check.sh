@@ -29,8 +29,8 @@ deploy_time=`date +"%F %T"`
 ##企业微信机器人
 function weixin_webhook {
 
-	#webhook_key='9dacde5e-cc46-4e88-80c2-db965c645bf3' #zabbix-webhook
-	webhook_key='5d1540fb-503c-4721-abd0-c0f62056b1ce' #前端大师哥	
+	#webhook_key='1dacde5e-cc46-4e88-80c2-db965c645bf3' #zabbix-webhook
+	webhook_key='1d1540fb-503c-4721-abd0-c0f62056b1ce' #前端大师哥	
 	curl 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key='${webhook_key}'' -H 'Content-Type: application/json' -d ' { "msgtype": "text", "text": { "content": "'"$subject"'"} }'
 }
 
