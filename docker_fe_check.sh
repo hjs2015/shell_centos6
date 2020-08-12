@@ -1,5 +1,5 @@
 #!/bin/env bash
-#查询系统僵尸进程
+#2haohr-前端容器接口检测
 
 source /etc/profile
 
